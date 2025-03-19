@@ -1,67 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: czhu <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/02 13:03:37 by czhu              #+#    #+#             */
+/*   Updated: 2025/03/02 13:15:08 by czhu             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/builtin.h"
-
-/* init the env from envp
-    - count the env variables
-    - malloc for env variables
-    - copy env variables to my own struct
-    - null terminated
-*/
-void	init_env(t_env *env, char **envp)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	if (!envp)
-	{
-		env->env_var = NULL;
-		return ;
-	}
-	while (envp[count])
-		count++;
-	env->env_var = (char **)malloc((count + 1) * sizeof(char *));
-	if (!env->env_var)
-	{
-		perror("malloc");
-		exit (1);
-	}
-	while (envp[i])
-	{
-		env->env_var[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	env->env_var[i] = NULL;
-}
-
-/* printout the env variables */
-void	print_env(t_env *env)
-{
-	int	i;
-
-	i = 0;
-	while (env && env->env_var && env->env_var[i])
-	{
-		printf("%s\n", env->env_var[i]);
-		i++;
-	}
-}
-
-/* free malloc for env */
-void	free_env(t_env *env)
-{
-	int	i;
-
-	i = 0;
-	if (!env || !env->env_var)
-		return ;
-	while (env->env_var[i])
-	{
-		free(env->env_var[i]);
-		i++;
-	}
-	free(env->env_var);
-}
 
 /* create a new entry of a key-value pair in env array
     - malloc for the new entry
@@ -86,6 +35,52 @@ char	*create_env_entry(char *key, char *value)
 	return (new_entry);
 }
 
+/* helper function to reproduce realloc
+	- malloc for the new_env array
+	- copy old_env to new_env
+	- null terminated
+	- free up old_env array
+	- return new_env
+*/
+char	**env_realloc(char **old_env, int new_size)
+{
+	char	**new_env;
+	int		i;
+
+	new_env = (char **)malloc(new_size * sizeof(char *));
+	if (!new_env)
+	{
+		perror("malloc");
+		return (NULL);
+	}
+	i = 0;
+	while (old_env[i] && i < new_size - 1)
+	{
+		new_env[i] = old_env[i];
+		i++;
+	}
+	new_env[i] = NULL;
+	if (old_env)
+		free(old_env);
+	return (new_env);
+}
+
+/* add new_entry to the end of the existing env array
+	- count the # of items in the existing env array
+	- relloac for count + 2: new entry + null terminator
+*/
+void	add_env(char *key, char *value, t_env *env)
+{
+	int		count;
+	char	**new_env;
+
+	count = count_env(env);
+	new_env = env_realloc(env->env_var, (count + 2) * sizeof(char *));
+	env->env_var = new_env;
+	env->env_var[count] = create_env_entry(key, value);
+	env->env_var[count + 1] = NULL;
+}
+
 /* update the env var after calling ft_cd
     - malloc for the new entry
     - loop through the env array
@@ -103,13 +98,14 @@ void	update_env(char *key, char *value, t_env *env)
 	i = 0;
 	while (env->env_var[i])
 	{
-		if (ft_strncmp(env->env_var[i], key, key_len) == 0 && env->env_var[i][key_len] == '=')
+		if (ft_strncmp(env->env_var[i], key, key_len) == 0
+				&& env->env_var[i][key_len] == '=')
 		{
 			free(env->env_var[i]);
 			env->env_var[i] = new_entry;
+			return ;
 		}
-        env->env_var[i] = new_entry;
-        env->env_var[i + 1] = NULL;
 		i++;
 	}
+	add_env(key, value, env);
 }

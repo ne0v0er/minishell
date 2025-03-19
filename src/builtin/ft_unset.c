@@ -6,24 +6,11 @@
 /*   By: czhu <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 11:16:25 by czhu              #+#    #+#             */
-/*   Updated: 2025/02/18 16:30:37 by czhu             ###   ########.fr       */
+/*   Updated: 2025/03/02 13:07:41 by czhu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/builtin.h"
-
-/* cal the length of the environment array */
-int	ft_env_len(t_env *env)
-{
-	int	len;
-
-	len = 0;
-	if (!env || !env->env_var)
-		return (0);
-	while (env->env_var[len])
-		len++;
-	return (len);
-}
 
 /* remove the var from the array
 	- loop through the env array
@@ -36,25 +23,25 @@ int	ft_env_len(t_env *env)
 */
 void	ft_unsetenv(char *name, t_env *env)
 {
-	int	len;
 	int	i;
 	int	j;
 
-	len = ft_env_len(env);
+	if (!env || !env->env_var)
+		return ;
 	i = 0;
 	while (env->env_var[i])
 	{
-		if (strncmp(env->env_var[i], name, ft_strlen(name)) == 0
+		if (ft_strncmp(env->env_var[i], name, ft_strlen(name)) == 0
 			&& env->env_var[i][ft_strlen(name)] == '=')
 		{
 			free(env->env_var[i]);
 			j = i;
-			while (j < len - 1)
+			while (env->env_var[j + 1])
 			{
 				env->env_var[j] = env->env_var[j + 1];
 				j++;
 			}
-			env->env_var[len - 1] = NULL;
+			env->env_var[j] = NULL;
 			return ;
 		}
 		i++;
@@ -93,19 +80,14 @@ int	is_valid_name(char *name)
 		- if arg valid
 			- call ft_unsetenv to remove the var
 */
-void	ft_unset(char **av, t_env *env, char **envp)
+void	ft_unset(char **av, t_env *env)
 {
 	int	i;
 
 	if (!av || !env)
 		return ;
 	if (!av[1])
-	{
-		printf("unset: not enough arguments\n");
 		return ;
-	}
-	if (!env->env_var)
-		init_env(env, envp);
 	i = 1;
 	while (av[i])
 	{

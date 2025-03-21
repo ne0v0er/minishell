@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: czhu <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: auzou <auzou@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 13:03:37 by czhu              #+#    #+#             */
-/*   Updated: 2025/03/02 13:15:08 by czhu             ###   ########.fr       */
+/*   Updated: 2025/03/21 14:13:44 by auzou            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	update_env(char *key, char *value, t_env *env)
 	while (env->env_var[i])
 	{
 		if (ft_strncmp(env->env_var[i], key, key_len) == 0
-				&& env->env_var[i][key_len] == '=')
+			&& env->env_var[i][key_len] == '=')
 		{
 			free(env->env_var[i]);
 			env->env_var[i] = new_entry;

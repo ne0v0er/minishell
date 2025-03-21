@@ -6,16 +6,12 @@
 /*   By: auzou <auzou@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 18:11:08 by auzou             #+#    #+#             */
-/*   Updated: 2025/03/19 18:21:02 by auzou            ###   ########.fr       */
+/*   Updated: 2025/03/20 16:44:40 by auzou            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/minishell.h"
 
-/* read the input from user
-    - print the cwd before $>
-    - read the input
-*/
 char	*read_line(void)
 {
 	char	*buf;
@@ -25,9 +21,6 @@ char	*read_line(void)
 	return (buf);
 }
 
-/* tokenize the input line
-    - parse the args
-*/
 char	**cell_split_line(char *line)
 {
 	char	**tokens;
@@ -38,7 +31,6 @@ char	**cell_split_line(char *line)
 	return (tokens);
 }
 
-/* launch external programs */
 void	launch_execution(char **args, t_env *env)
 {
 	pid_t	pid;
@@ -70,13 +62,6 @@ void	launch_execution(char **args, t_env *env)
 	}
 }
 
-/* execute shell
-    - input control
-    - check env init
-    - handle input redirect for heredoc
-    - if it's build in function, call it
-    - if not, launch external programs
-*/
 void	execute_shell(t_cmd *cmd, t_env *env)
 {
 	int			i;

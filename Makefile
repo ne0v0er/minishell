@@ -28,7 +28,9 @@ SRC = $(BUILTIN_DIR)/builtin_utils.c \
 		$(MAIN_DIR)/loop_util1.c \
 		$(MAIN_DIR)/token_utils_1.c \
 		$(MAIN_DIR)/token_utils_2.c \
-		$(MAIN_DIR)/tokenize_utils.c \
+		$(MAIN_DIR)/tokenize_utils1.c \
+		$(MAIN_DIR)/tokenize_utils2.c \
+		$(MAIN_DIR)/tokenize_utils3.c \
 		$(MAIN_DIR)/shell_loop.c \
 		$(MAIN_DIR)/extract_quoted_utiles.c \
 		$(SIG_DIR)/signal.c \

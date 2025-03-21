@@ -59,11 +59,16 @@ t_redir *create_new_redir(char *file, int type);
 void add_redir(t_cmd *cmd, char *file, int type);
 void free_redir(t_redir *redir);
 
-/* tokenize_utils */
+/* tokenize_utils1 */
 int			ft_isspace(char a);
 int			is_special_char(char c);
 int			is_quote(char c);
-void	tokenize_util1(t_token *tokens, int *i, char *input);
+void		tokenize_util1(t_token *tokens, int *i, char *input);
+
+/* tokenize_utils2 */
+int	tokenize_util3(t_token *tokens, int *i, char *input);
+void	tokenize_util2(t_token *tokens, int *i, char *input);
+void	tokenize_util4(t_token **tokens, int *i, char *input);
 
 /* token_utils_1 */
 void		add_token(t_token **head, t_token *new_token);

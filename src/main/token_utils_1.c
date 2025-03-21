@@ -6,7 +6,7 @@
 /*   By: auzou <auzou@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 21:03:41 by auzou             #+#    #+#             */
-/*   Updated: 2025/03/19 18:29:39 by auzou            ###   ########.fr       */
+/*   Updated: 2025/03/19 23:12:37 by auzou            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ char	*extract_quoted(char *input, int *i, char quote)
 	char	*quoted;
 
 	start = *i;
-	if (is_quote(input[start]))
-		return (NULL);
+	// if (is_quote(input[start]))
+	// 	return (NULL);
 	while (input[*i] && input[*i] != quote)
 		(*i)++;
 	if (!input[*i])
